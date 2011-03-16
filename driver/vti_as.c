@@ -149,7 +149,6 @@ void as_init(void)
 // *************************************************************************************************
 void as_start(void)
 {
-	volatile u16 Counter_u16;
 	u8 bConfig;//, bStatus;
 	
 	// Initialize SPI interface to acceleration sensor

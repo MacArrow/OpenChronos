@@ -188,9 +188,10 @@ void mx_date(line_t line)
 	clear_display_all();
 			
 	// Convert global to local variables
-	day 	= sDate.day;
-	month 	= sDate.month;
-	year 	= sDate.year;
+	day 	 = sDate.day;
+	month 	 = sDate.month;
+	year     = sDate.year;
+        max_days = get_numberOfDays(month, year);
 		
 	// Init value index
 	select = 0;	

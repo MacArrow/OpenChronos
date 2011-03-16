@@ -54,7 +54,7 @@
 // logic
 #include "user.h"
 #ifdef CONFIG_VARIO
-# include "vario.h"
+#include "vario.h"
 #endif
 
 
@@ -84,34 +84,41 @@ extern u8 ps_ok;
 // @param       none
 // @return      none
 // *************************************************************************************************
-void reset_altitude_measurement(void)
-{
-	// Menu item is not visible
-	sAlt.state 		= MENU_ITEM_NOT_VISIBLE;
 
-	// Clear timeout counter
-	sAlt.timeout	= 0;
-	
-	// Set default altitude value
-	sAlt.altitude		= 0;
-	
-	// Pressure sensor ok?
-	if (ps_ok)
-	{
-		// Initialise pressure table
-		init_pressure_table();
-		
-		// Do single conversion
-		start_altitude_measurement();
-		stop_altitude_measurement();	
+void reset_altitude_measurement(void) {
+    // Menu item is not visible
+    sAlt.state = MENU_ITEM_NOT_VISIBLE;
 
-		// Apply calibration offset and recalculate pressure table
-		if (sAlt.altitude_offset != 0)
-		{
-			sAlt.altitude += sAlt.altitude_offset;
-			update_pressure_table(sAlt.altitude, sAlt.pressure, sAlt.temperature);
-		}
-	}
+    // Menu is in default mode
+    sAlt.view_mode = DISPLAY_DEFAULT_VIEW;
+
+    // Clear timeout counter
+    sAlt.timeout = 0;
+
+    // Set default altitude value
+    sAlt.altitude = 0;
+
+    // Set default pressure value
+    sAlt.pressure = 0;
+
+    // Set default pressure offset
+    sAlt.pressure_offset = 0;
+
+    // Pressure sensor ok?
+    if (ps_ok) {
+        // Initialise pressure table
+        init_pressure_table();
+
+        // Do single conversion
+        start_altitude_measurement();
+        stop_altitude_measurement();
+
+        // Apply calibration offset and recalculate pressure table
+        if (sAlt.altitude_offset != 0) {
+            sAlt.altitude += sAlt.altitude_offset;
+            update_pressure_table(sAlt.altitude, sAlt.pressure, sAlt.temperature);
+        }
+    }
 }
 
 #ifndef CONFIG_METRIC_ONLY
@@ -121,9 +128,9 @@ void reset_altitude_measurement(void)
 // @param       u16 m		Meters
 // @return      u16		Feet
 // *************************************************************************************************
-s16 convert_m_to_ft(s16 m)
-{
-	return (((s32)328*m)/100);
+
+s16 convert_m_to_ft(s16 m) {
+    return (((s32) 328 * m) / 100);
 }
 
 
@@ -133,9 +140,9 @@ s16 convert_m_to_ft(s16 m)
 // @param       u16 ft		Feet
 // @return      u16		Meters
 // *************************************************************************************************
-s16 convert_ft_to_m(s16 ft)
-{
-	return (((s32)ft*61)/200);
+
+s16 convert_ft_to_m(s16 ft) {
+    return (((s32) ft * 61) / 200);
 }
 
 #endif
@@ -146,9 +153,9 @@ s16 convert_ft_to_m(s16 ft)
 // @param       none
 // @return      u8		1=Measurement ongoing, 0=measurement off
 // *************************************************************************************************
-u8 is_altitude_measurement(void)
-{
-	return ((sAlt.state == MENU_ITEM_VISIBLE) && (sAlt.timeout > 0));
+
+u8 is_altitude_measurement(void) {
+    return ((sAlt.state == MENU_ITEM_VISIBLE) && (sAlt.timeout > 0));
 }
 
 
@@ -158,32 +165,30 @@ u8 is_altitude_measurement(void)
 // @param       none
 // @return      none
 // *************************************************************************************************
-void start_altitude_measurement(void)
-{
-	// Show warning if pressure sensor was not initialised properly
-	if (!ps_ok) 
-	{
-		display_chars(LCD_SEG_L1_2_0, (u8*)"ERR", SEG_ON);
-		return;
-	}
 
-	// Start altitude measurement if timeout has elapsed
-	if (sAlt.timeout == 0)
-	{
-		// Enable DRDY IRQ on rising edge
-		PS_INT_IFG &= ~PS_INT_PIN;
-		PS_INT_IE |= PS_INT_PIN;
+void start_altitude_measurement(void) {
+    // Show warning if pressure sensor was not initialised properly
+    if (!ps_ok) {
+        display_chars(LCD_SEG_L1_2_0, (u8*) "ERR", SEG_ON);
+        return;
+    }
 
-		// Start pressure sensor
-		ps_start(); 
+    // Start altitude measurement if timeout has elapsed
+    if (sAlt.timeout == 0) {
+        // Enable DRDY IRQ on rising edge
+        PS_INT_IFG &= ~PS_INT_PIN;
+        PS_INT_IE |= PS_INT_PIN;
 
-		// Set timeout counter only if sensor status was OK
-		sAlt.timeout = ALTITUDE_MEASUREMENT_TIMEOUT;
+        // Start pressure sensor
+        ps_start();
 
-		// Get updated altitude
-		while((PS_INT_IN & PS_INT_PIN) == 0); 
-		do_altitude_measurement(FILTER_OFF);
-	}
+        // Set timeout counter only if sensor status was OK
+        sAlt.timeout = ALTITUDE_MEASUREMENT_TIMEOUT;
+
+        // Get updated altitude
+        while ((PS_INT_IN & PS_INT_PIN) == 0);
+        do_altitude_measurement(FILTER_OFF);
+    }
 }
 
 
@@ -193,20 +198,20 @@ void start_altitude_measurement(void)
 // @param       none
 // @return      none
 // *************************************************************************************************
-void stop_altitude_measurement(void)
-{
-	// Return if pressure sensor was not initialised properly
-	if (!ps_ok) return;
-	
-	// Stop pressure sensor
-	ps_stop();
-	
-	// Disable DRDY IRQ
-	PS_INT_IE  &= ~PS_INT_PIN;
-	PS_INT_IFG &= ~PS_INT_PIN;
-	
-	// Clear timeout counter
-	sAlt.timeout = 0;
+
+void stop_altitude_measurement(void) {
+    // Return if pressure sensor was not initialised properly
+    if (!ps_ok) return;
+
+    // Stop pressure sensor
+    ps_stop();
+
+    // Disable DRDY IRQ
+    PS_INT_IE &= ~PS_INT_PIN;
+    PS_INT_IFG &= ~PS_INT_PIN;
+
+    // Clear timeout counter
+    sAlt.timeout = 0;
 }
 
 
@@ -217,47 +222,45 @@ void stop_altitude_measurement(void)
 // @param       none
 // @return      none
 // *************************************************************************************************
-void do_altitude_measurement(u8 filter)
-{
-	volatile u32 pressure;
 
-	// If sensor is not ready, skip data read	
-	if ((PS_INT_IN & PS_INT_PIN) == 0) return;
-		
-	// Get temperature (format is *10?K) from sensor
-	sAlt.temperature = ps_get_temp();
+void do_altitude_measurement(u8 filter) {
+    volatile u32 pressure;
 
-	// Get pressure (format is 1Pa) from sensor
-	pressure = ps_get_pa();	
-		
-	// Store measured pressure value
-	if (filter == FILTER_OFF) //sAlt.pressure == 0) 
-	{
-		sAlt.pressure = pressure;
-	}
-	else
-	{
-		// Filter current pressure
+    // If sensor is not ready, skip data read
+    if ((PS_INT_IN & PS_INT_PIN) == 0) return;
+
+    // Get temperature (format is *10?K) from sensor
+    sAlt.temperature = ps_get_temp();
+
+    // Get pressure (format is 1Pa) from sensor
+    pressure = ps_get_pa();
+
+    // Store measured pressure value
+    if (filter == FILTER_OFF) //sAlt.pressure == 0)
+    {
+        sAlt.pressure = pressure;
+    } else {
+        // Filter current pressure
 #ifdef FIXEDPOINT
-        pressure = (u32)(((pressure * 2) + (sAlt.pressure * 8))/10);
+        pressure = (u32) (((pressure * 2) + (sAlt.pressure * 8)) / 10);
 #else
-		pressure = (u32)((pressure * 0.2) + (sAlt.pressure * 0.8));
+        pressure = (u32) ((pressure * 0.2) + (sAlt.pressure * 0.8));
 #endif
-		// Store average pressure
-		sAlt.pressure = pressure;
-	}
+        // Store average pressure
+        sAlt.pressure = pressure;
+    }
 
-	// Convert pressure (Pa) and temperature (?K) to altitude (m).
+    // Convert pressure (Pa) and temperature (?K) to altitude (m).
 #ifdef FIXEDPOINT
-	sAlt.altitude = conv_pa_to_altitude(sAlt.pressure, sAlt.temperature);
+    sAlt.altitude = conv_pa_to_altitude(sAlt.pressure, sAlt.temperature);
 #else
     sAlt.altitude = conv_pa_to_meter(sAlt.pressure, sAlt.temperature);
 #endif
 
 #ifdef CONFIG_VARIO
-   // Stash a copy to the vario after filtering. If doing so before, there
-   // is just too much unnecessary fluctuation, up to +/- 7Pa seen.
-   vario_p_write( pressure );
+    // Stash a copy to the vario after filtering. If doing so before, there
+    // is just too much unnecessary fluctuation, up to +/- 7Pa seen.
+    vario_p_write(pressure);
 #endif
 }
 
@@ -268,11 +271,13 @@ void do_altitude_measurement(u8 filter)
 // @param       u8 line	LINE1, LINE2
 // @return      none
 // *************************************************************************************************
-void sx_altitude(u8 line)
-{
-	// Function can be empty
-	
-	// Restarting of altitude measurement will be done by subsequent full display update 
+
+void sx_altitude(u8 line) {
+    // Toggle display view style
+    if (sAlt.view_mode == DISPLAY_DEFAULT_VIEW)
+        sAlt.view_mode = DISPLAY_ALTERNATIVE_VIEW;
+    else 
+        sAlt.view_mode = DISPLAY_DEFAULT_VIEW;
 }
 
 
@@ -282,82 +287,82 @@ void sx_altitude(u8 line)
 // @param       u8 line		LINE1
 // @return      none
 // *************************************************************************************************
-void mx_altitude(u8 line)
-{
-	s32 altitude;
-	s32	limit_high, limit_low;
 
-	// Clear display
-	clear_display_all();
+void mx_altitude(u8 line) {
+    s32 altitude = sAlt.altitude;
+    s32 pressure = (sAlt.pressure + sAlt.pressure_offset) * 75 / 10000;
+    s32* value = &pressure;
+    s32 limit_high = 900;
+    s32 limit_low = 50;
 
-	// Set lower and upper limits for offset correction
+    // Clear display
+    clear_display_all();
+
+    // Set lower and upper limits for offset correction
+    if (sAlt.view_mode == DISPLAY_ALTERNATIVE_VIEW) {
 #ifdef CONFIG_METRIC_ONLY
-	display_symbol(LCD_UNIT_L1_M, SEG_ON);
+        display_symbol(LCD_UNIT_L1_M, SEG_ON);
 
-	// Convert global variable to local variable
-	altitude  = sAlt.altitude; 
-
-	// Limits for set_value function
-	limit_low = -100;
-	limit_high = 4000;
+        // Limits for set_value function
+        limit_low = -100;
+        limit_high = 4000;
 #else
-	if (sys.flag.use_metric_units)
-	{
-		// Display "m" symbol
-		display_symbol(LCD_UNIT_L1_M, SEG_ON);
+        if (sys.flag.use_metric_units) {
+            // Display "m" symbol
+            display_symbol(LCD_UNIT_L1_M, SEG_ON);
 
-		// Convert global variable to local variable
-		altitude  = sAlt.altitude; 
+            // Limits for set_value function
+            limit_low = -100;
+            limit_high = 4000;
+        } else // English units
+        {
+            // Display "ft" symbol
+            display_symbol(LCD_UNIT_L1_FT, SEG_ON);
 
-		// Limits for set_value function
-		limit_low = -100;
-		limit_high = 4000;
-	}
-	else // English units
-	{
-		// Display "ft" symbol
-		display_symbol(LCD_UNIT_L1_FT, SEG_ON);
-		
-		// Convert altitude in meters to feet
-		altitude = sAlt.altitude;
+            // Convert from meters to feet
+            altitude = convert_m_to_ft(altitude);
 
- 		// Convert from meters to feet
-		altitude = convert_m_to_ft(altitude);		
-
-		// Limits for set_value function
-		limit_low = -500;
-		limit_high = 9999;
-	}
+            // Limits for set_value function
+            limit_low = -500;
+            limit_high = 9999;
+        }
 #endif
-	// Loop values until all are set or user breaks	set
-	while(1) 
-	{
-		// Idle timeout: exit without saving 
-		if (sys.flag.idle_timeout) break;
+    }
+    // Loop values until all are set or user breaks	set
+    while (1) {
+        // Idle timeout: exit without saving
+        if (sys.flag.idle_timeout) break;
 
-		// Button STAR (short): save, then exit 
-		if (button.flag.star) 
-		{
-			// When using English units, convert ft back to m before updating pressure table
+        // Button STAR (short): save, then exit
+        if (button.flag.star) {
+            // When using English units, convert ft back to m before updating pressure table
 #ifndef CONFIG_METRIC_ONLY
-			if (!sys.flag.use_metric_units) altitude = convert_ft_to_m((s16)altitude);
+            if (!sys.flag.use_metric_units) altitude = convert_ft_to_m((s16) altitude);
 #endif
+            sAlt.pressure_offset = (pressure * 133) - sAlt.pressure;
 
-			// Update pressure table
-			update_pressure_table((s16)altitude, sAlt.pressure, sAlt.temperature);
-			
-			// Set display update flag
-			display.flag.line1_full_update = 1;
+            // Update pressure table
+            update_pressure_table((s16) altitude, sAlt.pressure, sAlt.temperature);
 
-			break;
-		}
+            // Set display update flag
+            display.flag.line1_full_update = 1;
 
-		// Set current altitude - offset is set when leaving function
-		set_value(&altitude, 4, 3, limit_low, limit_high, SETVALUE_DISPLAY_VALUE + SETVALUE_FAST_MODE + SETVALUE_DISPLAY_ARROWS, LCD_SEG_L1_3_0, display_value1);
-	}		
-	
-	// Clear button flags
-	button.all_flags = 0;
+            break;
+        }
+
+        // Adjust the value which is currently on display
+        if (sAlt.view_mode == DISPLAY_ALTERNATIVE_VIEW) {
+            value = &altitude;
+        } else {
+            value = &pressure;
+        }
+
+        // Set current altitude - offset is set when leaving function
+        set_value(value, 4, 3, limit_low, limit_high, SETVALUE_DISPLAY_VALUE + SETVALUE_FAST_MODE + SETVALUE_DISPLAY_ARROWS, LCD_SEG_L1_3_0, display_value1);
+    }
+
+    // Clear button flags
+    button.all_flags = 0;
 }
 
 
@@ -369,102 +374,98 @@ void mx_altitude(u8 line)
 // @return      none
 // *************************************************************************************************
 #ifdef CONFIG_ALTITUDE
-void display_altitude(u8 line, u8 update)
-{
-	u8 * str;
-#ifndef CONFIG_METRIC_ONLY
-	s16 ft;
-#endif
-	
-	// redraw whole screen
-	if (update == DISPLAY_LINE_UPDATE_FULL)	
-	{
-		// Enable pressure measurement
-		sAlt.state = MENU_ITEM_VISIBLE;
 
-		// Start measurement
-		start_altitude_measurement();
+void display_altitude(u8 line, u8 update) {
+    u8 * str;
+#ifndef CONFIG_METRIC_ONLY
+    s16 ft;
+#endif
+
+    // redraw whole screen
+    if (update == DISPLAY_LINE_UPDATE_FULL) {
+        // Enable pressure measurement
+        sAlt.state = MENU_ITEM_VISIBLE;
+
+        // Start measurement
+        start_altitude_measurement();
+        
+        if (sAlt.view_mode == DISPLAY_ALTERNATIVE_VIEW) {
 #ifdef CONFIG_METRIC_ONLY
-			display_symbol(LCD_UNIT_L1_M, SEG_ON);
+            display_symbol(LCD_UNIT_L1_M, SEG_ON);
 #else		
-		if (sys.flag.use_metric_units)
-		{
-			// Display "m" symbol
-			display_symbol(LCD_UNIT_L1_M, SEG_ON);
-		}
-		else
-		{
-			// Display "ft" symbol
-			display_symbol(LCD_UNIT_L1_FT, SEG_ON);
-		}
-#endif		
-		// Display altitude
-		display_altitude(LINE1, DISPLAY_LINE_UPDATE_PARTIAL);
-	}
-	else if (update == DISPLAY_LINE_UPDATE_PARTIAL)
-	{
-		// Update display only while measurement is active
-		if (sAlt.timeout > 0)
-		{
-#ifndef CONFIG_METRIC_ONLY
-			if (sys.flag.use_metric_units)
-			{
+            if (sys.flag.use_metric_units) {
+                // Display "m" symbol
+                display_symbol(LCD_UNIT_L1_M, SEG_ON);
+            } else {
+                // Display "ft" symbol
+                display_symbol(LCD_UNIT_L1_FT, SEG_ON);
+            }
 #endif
-				// Display altitude in xxxx m format, allow 3 leading blank digits
-				if (sAlt.altitude >= 0)
-				{
-					str = itoa(sAlt.altitude, 4, 3);
-					display_symbol(LCD_SYMB_ARROW_UP, SEG_ON);
-					display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
-				}
-				else
-				{
-					str = itoa(sAlt.altitude*(-1), 4, 3);
-					display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
-					display_symbol(LCD_SYMB_ARROW_DOWN, SEG_ON);
-				}
+        } else {
+            display_symbol(LCD_UNIT_L1_M, SEG_OFF);
+            display_symbol(LCD_UNIT_L1_FT, SEG_OFF);
+            display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
+            display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
+        }
+        // Display altitude
+        display_altitude(LINE1, DISPLAY_LINE_UPDATE_PARTIAL);
+    } else if (update == DISPLAY_LINE_UPDATE_PARTIAL) {
+        // Update display only while measurement is active
+        if (sAlt.timeout > 0) {
+            if (sAlt.view_mode == DISPLAY_ALTERNATIVE_VIEW) {
 #ifndef CONFIG_METRIC_ONLY
-			}
-			else
-			{
-				// Convert from meters to feet
-				ft = convert_m_to_ft(sAlt.altitude);
-				
-				// Limit to 9999ft (3047m)
-				if (ft > 9999) ft = 9999;
-				
-				// Display altitude in xxxx ft format, allow 3 leading blank digits
-				if (ft >= 0)
-				{
-					str = itoa(ft, 4, 3);
-					display_symbol(LCD_SYMB_ARROW_UP, SEG_ON);
-					display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
-				}
-				else
-				{
-					str = itoa(ft*(-1), 4, 3);
-					display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
-					display_symbol(LCD_SYMB_ARROW_DOWN, SEG_ON);
-				}				
-			}
+                if (sys.flag.use_metric_units) {
 #endif
-			display_chars(LCD_SEG_L1_3_0, str, SEG_ON);
-		}
-	}
-	else if (update == DISPLAY_LINE_CLEAR)
-	{
-		// Disable pressure measurement
-		sAlt.state = MENU_ITEM_NOT_VISIBLE;
+                    // Display altitude in xxxx m format, allow 3 leading blank digits
+                    if (sAlt.altitude >= 0) {
+                        str = itoa(sAlt.altitude, 4, 3);
+                        display_symbol(LCD_SYMB_ARROW_UP, SEG_ON);
+                        display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
+                    } else {
+                        str = itoa(sAlt.altitude * (-1), 4, 3);
+                        display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
+                        display_symbol(LCD_SYMB_ARROW_DOWN, SEG_ON);
+                    }
+#ifndef CONFIG_METRIC_ONLY
+                } else {
+                    // Convert from meters to feet
+                    ft = convert_m_to_ft(sAlt.altitude);
 
-		// Stop measurement
-		stop_altitude_measurement();
-		
-		// Clean up function-specific segments before leaving function
-		display_symbol(LCD_UNIT_L1_M, SEG_OFF);
-		display_symbol(LCD_UNIT_L1_FT, SEG_OFF);
-		display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
-		display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
-	}
+                    // Limit to 9999ft (3047m)
+                    if (ft > 9999) ft = 9999;
+
+                    // Display altitude in xxxx ft format, allow 3 leading blank digits
+                    if (ft >= 0) {
+                        str = itoa(ft, 4, 3);
+                        display_symbol(LCD_SYMB_ARROW_UP, SEG_ON);
+                        display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
+                    } else {
+                        str = itoa(ft * (-1), 4, 3);
+                        display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
+                        display_symbol(LCD_SYMB_ARROW_DOWN, SEG_ON);
+                    }
+                }
+#endif
+            } else {
+                u32 pressure_mmHg = (sAlt.pressure + sAlt.pressure_offset) * 75 / 10000;
+                str = itoa(pressure_mmHg, 4, 3);
+                str[0] = 'P';
+            }
+            display_chars(LCD_SEG_L1_3_0, str, SEG_ON);
+        }
+    } else if (update == DISPLAY_LINE_CLEAR) {
+        // Disable pressure measurement
+        sAlt.state = MENU_ITEM_NOT_VISIBLE;
+
+        // Stop measurement
+        stop_altitude_measurement();
+
+        // Clean up function-specific segments before leaving function
+        display_symbol(LCD_UNIT_L1_M, SEG_OFF);
+        display_symbol(LCD_UNIT_L1_FT, SEG_OFF);
+        display_symbol(LCD_SYMB_ARROW_UP, SEG_OFF);
+        display_symbol(LCD_SYMB_ARROW_DOWN, SEG_OFF);
+    }
 }
 #endif // CONFIG_ALTITUDE
 

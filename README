@@ -1,3 +1,7 @@
+This fork of poelzi OpenChronos adds the pressure meter shows 
+barometric pressure in mmHG
+
+--------------------------------------------------------------------
 
 This fork adds a variometer, an instrument indicating vertical speed,
 essentially for use in free flight (paragliding, hang gliding, ...).

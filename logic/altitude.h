@@ -64,25 +64,31 @@ extern void display_altitude(u8 line, u8 update);
 
 // *************************************************************************************************
 // Global Variable section
-struct alt
-{
-	// MENU_ITEM_NOT_VISIBLE, MENU_ITEM_VISIBLE   
-	menu_t	state; 
 
-	// Pressure (Pa)
-	u32		pressure;
+struct alt {
+    // MENU_ITEM_NOT_VISIBLE, MENU_ITEM_VISIBLE
+    menu_t state;
 
-	// Temperature (°K)
-	u16		temperature;
+    // Current view mode: altitude or pressure
+    u8 view_mode;
 
-	// Altitude (m)
-	s16		altitude;
-	
-	// Altitude offset stored during calibration
-	s16		altitude_offset;
+    // Pressure (Pa)
+    u32 pressure;
 
-	// Timeout
-	u16		timeout;
+    // Pressure offset calculated during calibration
+    s32 pressure_offset;
+
+    // Temperature (ï¿½K)
+    u16 temperature;
+
+    // Altitude (m)
+    s16 altitude;
+
+    // Altitude offset stored during calibration
+    s16 altitude_offset;
+
+    // Timeout
+    u16 timeout;
 };
 extern struct alt sAlt;
 

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <df name="OpenChronos" root="..">
+      <df name="bluerobin" kind="SOURCE_LOGICAL_FOLDER">
+        <in>BlueRobin_RX_API.h</in>
+        <in>bm.h</in>
+      </df>
+      <df name="contrib" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+      <df name="doc" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+      <df name="driver" kind="SOURCE_LOGICAL_FOLDER">
+        <in>adc12.c</in>
+        <in>adc12.h</in>
+        <in>buzzer.c</in>
+        <in>buzzer.h</in>
+        <in>display.c</in>
+        <in>display.h</in>
+        <in>display1.c</in>
+        <in>dsp.c</in>
+        <in>dsp.h</in>
+        <in>infomem.c</in>
+        <in>infomem.h</in>
+        <in>pmm.c</in>
+        <in>pmm.h</in>
+        <in>ports.c</in>
+        <in>ports.h</in>
+        <in>radio.c</in>
+        <in>radio.h</in>
+        <in>rf1a.c</in>
+        <in>rf1a.h</in>
+        <in>timer.c</in>
+        <in>timer.h</in>
+        <in>vti_as.c</in>
+        <in>vti_as.h</in>
+        <in>vti_ps.c</in>
+        <in>vti_ps.h</in>
+      </df>
+      <df name="gcc" kind="SOURCE_LOGICAL_FOLDER">
+        <in>intrinsics.c</in>
+        <in>intrinsics.h</in>
+      </df>
+      <df name="include" kind="SOURCE_LOGICAL_FOLDER">
+        <in>project.h</in>
+      </df>
+      <df name="logic" kind="SOURCE_LOGICAL_FOLDER">
+        <in>MYsimpliciti.c</in>
+        <in>acceleration.c</in>
+        <in>acceleration.h</in>
+        <in>alarm.c</in>
+        <in>alarm.h</in>
+        <in>altitude.c</in>
+        <in>altitude.h</in>
+        <in>battery.c</in>
+        <in>battery.h</in>
+        <in>bluerobin.c</in>
+        <in>bluerobin.h</in>
+        <in>clock.c</in>
+        <in>clock.h</in>
+        <in>date.c</in>
+        <in>date.h</in>
+        <in>eggtimer.c</in>
+        <in>eggtimer.h</in>
+        <in>gps.c</in>
+        <in>gps.h</in>
+        <in>menu.c</in>
+        <in>menu.h</in>
+        <in>phase_clock.c</in>
+        <in>phase_clock.h</in>
+        <in>prout.c</in>
+        <in>prout.h</in>
+        <in>rfbsl.c</in>
+        <in>rfbsl.h</in>
+        <in>rfsimpliciti.c</in>
+        <in>rfsimpliciti.h</in>
+        <in>sequence.c</in>
+        <in>sequence.h</in>
+        <in>sidereal.c</in>
+        <in>sidereal.h</in>
+        <in>stopwatch.c</in>
+        <in>stopwatch.h</in>
+        <in>strength.c</in>
+        <in>strength.h</in>
+        <in>temperature.c</in>
+        <in>temperature.h</in>
+        <in>test.c</in>
+        <in>test.h</in>
+        <in>user.c</in>
+        <in>user.h</in>
+        <in>vario.c</in>
+        <in>vario.h</in>
+      </df>
+      <df name="OpenChronos" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+      <df name="simpliciti" kind="SOURCE_LOGICAL_FOLDER">
+        <df name="Applications" kind="SOURCE_LOGICAL_FOLDER">
+          <df name="application" kind="SOURCE_LOGICAL_FOLDER">
+            <df name="End_Device" kind="SOURCE_LOGICAL_FOLDER">
+              <in>main_ED_BM.c</in>
+            </df>
+          </df>
+          <df name="configuration" kind="SOURCE_LOGICAL_FOLDER">
+            <df name="End Device" kind="SOURCE_LOGICAL_FOLDER">
+            </df>
+            <in>smpl_config.h</in>
+            <in>smpl_nwk_config.h</in>
+          </df>
+        </df>
+        <df name="Components" kind="SOURCE_LOGICAL_FOLDER">
+          <df name="bsp" kind="SOURCE_LOGICAL_FOLDER">
+            <df name="boards" kind="SOURCE_LOGICAL_FOLDER">
+              <df name="CC430EM" kind="SOURCE_LOGICAL_FOLDER">
+                <df name="bsp_external" kind="SOURCE_LOGICAL_FOLDER">
+                  <in>mrfi_board_defs.h</in>
+                </df>
+                <in>bsp_board.c</in>
+                <in>bsp_board_defs.h</in>
+                <in>bsp_button_defs.h</in>
+                <in>bsp_config.h</in>
+                <in>bsp_driver_defs.h</in>
+                <in>bsp_drivers.c</in>
+                <in>bsp_led_defs.h</in>
+              </df>
+            </df>
+            <df name="drivers" kind="SOURCE_LOGICAL_FOLDER">
+              <df name="code" kind="SOURCE_LOGICAL_FOLDER">
+                <in>bsp_buttons.c</in>
+                <in>bsp_generic_buttons.h</in>
+                <in>bsp_generic_leds.h</in>
+                <in>bsp_leds.c</in>
+              </df>
+              <in>bsp_buttons.h</in>
+              <in>bsp_leds.h</in>
+            </df>
+            <df name="mcus" kind="SOURCE_LOGICAL_FOLDER">
+              <in>bsp_msp430_defs.h</in>
+            </df>
+            <in>bsp.c</in>
+            <in>bsp.h</in>
+            <in>bsp_macros.h</in>
+          </df>
+          <df name="mrfi" kind="SOURCE_LOGICAL_FOLDER">
+            <df name="radios" kind="SOURCE_LOGICAL_FOLDER">
+              <df name="family5" kind="SOURCE_LOGICAL_FOLDER">
+                <in>mrfi_radio.c</in>
+                <in>mrfi_radio_interface.c</in>
+                <in>mrfi_radio_interface.h</in>
+              </df>
+            </df>
+            <df name="smartrf" kind="SOURCE_LOGICAL_FOLDER">
+              <df name="CC1101" kind="SOURCE_LOGICAL_FOLDER">
+                <in>smartrf_CC1101.h</in>
+              </df>
+              <df name="CC430" kind="SOURCE_LOGICAL_FOLDER">
+                <in>smartrf_CC430.h</in>
+              </df>
+            </df>
+            <in>mrfi.c</in>
+            <in>mrfi.h</in>
+            <in>mrfi_defs.h</in>
+          </df>
+          <df name="nwk" kind="SOURCE_LOGICAL_FOLDER">
+            <in>nwk.c</in>
+            <in>nwk.h</in>
+            <in>nwk_QMgmt.c</in>
+            <in>nwk_QMgmt.h</in>
+            <in>nwk_api.c</in>
+            <in>nwk_api.h</in>
+            <in>nwk_app.h</in>
+            <in>nwk_frame.c</in>
+            <in>nwk_frame.h</in>
+            <in>nwk_globals.c</in>
+            <in>nwk_globals.h</in>
+            <in>nwk_types.h</in>
+          </df>
+          <df name="nwk_applications" kind="SOURCE_LOGICAL_FOLDER">
+            <in>nwk_freq.c</in>
+            <in>nwk_freq.h</in>
+            <in>nwk_ioctl.c</in>
+            <in>nwk_ioctl.h</in>
+            <in>nwk_join.c</in>
+            <in>nwk_join.h</in>
+            <in>nwk_link.c</in>
+            <in>nwk_link.h</in>
+            <in>nwk_mgmt.c</in>
+            <in>nwk_mgmt.h</in>
+            <in>nwk_ping.c</in>
+            <in>nwk_ping.h</in>
+            <in>nwk_security.c</in>
+            <in>nwk_security.h</in>
+          </df>
+        </df>
+        <in>simpliciti.h</in>
+      </df>
+      <df name="tools" kind="SOURCE_LOGICAL_FOLDER">
+        <df name="urwid" kind="SOURCE_LOGICAL_FOLDER">
+        </df>
+      </df>
+      <in>config.h</in>
+      <in>ezchronos.c</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>OpenChronos-Makefile.mk</itemPath>
+      <itemPath>../makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>..</Elem>
+  </sourceRootList>
+  <projectmakefile>OpenChronos-Makefile.mk</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>MSP430|GNU</compilerSet>
+        <platform>4</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>..</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f makefile</buildCommand>
+          <cleanCommand>${MAKE} -f makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>../simpliciti/Components/bsp</pElem>
+              <pElem>../simpliciti/Components/mrfi</pElem>
+              <pElem>../logic</pElem>
+              <pElem>../simpliciti/Components/bsp/drivers</pElem>
+              <pElem>../driver</pElem>
+              <pElem>../bluerobin</pElem>
+              <pElem>../gcc</pElem>
+              <pElem>../simpliciti/Components/nwk_applications</pElem>
+              <pElem>../include</pElem>
+              <pElem>..</pElem>
+              <pElem>../simpliciti</pElem>
+              <pElem>../simpliciti/Components/bsp/boards/CC430EM</pElem>
+              <pElem>../simpliciti/Components/nwk</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>MRFI_CC430</Elem>
+              <Elem>__CC430F6137__</Elem>
+              <Elem>ELIMINATE_BLUEROBIN</Elem>
+              <Elem>__MSP430_6137__</Elem>
+              <Elem>ISM_US</Elem>
+            </preprocessorList>
+          </cTool>
+        </makeTool>
+      </makefileType>
+      <item path="../bluerobin/BlueRobin_RX_API.h" ex="true" tool="3">
+      </item>
+      <item path="../driver/infomem.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/MYsimpliciti.c" ex="true" tool="0">
+      </item>
+      <item path="../logic/bluerobin.c" ex="true" tool="0">
+      </item>
+      <item path="../logic/bluerobin.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/eggtimer.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/gps.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/phase_clock.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/prout.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/sequence.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/sidereal.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/test.h" ex="true" tool="3">
+      </item>
+      <item path="../logic/vario.h" ex="true" tool="3">
+      </item>
+      <item path="../simpliciti/Components/mrfi/smartrf/CC1101/smartrf_CC1101.h"
+            ex="true"
+            tool="3">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

@@ -86,9 +86,8 @@ struct time sTime;
 
 // Display values for time format selection
 #if (OPTION_TIME_DISPLAY == CLOCK_DISPLAY_SELECT)
-const u8 selection_Timeformat[][4] =
-{
-	"24H", "12H"
+const u8 selection_Timeformat[][4] ={
+    "24H", "12H"
 };
 #endif
 
@@ -102,26 +101,26 @@ const u8 selection_Timeformat[][4] =
 // @param       none
 // @return      none
 // *************************************************************************************************
-void reset_clock(void)
-{
-	// Set global system time to 0
-	sTime.system_time = 0;
 
-	// Set main 24H time to start value
-	sTime.hour   = 4;
-	sTime.minute = 30;
-	sTime.second = 0;
+void reset_clock(void) {
+    // Set global system time to 0
+    sTime.system_time = 0;
 
-	// Display style of both lines is default (HH:MM)
-	sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
-	sTime.line2ViewStyle = DISPLAY_DEFAULT_VIEW;
+    // Set main 24H time to start value
+    sTime.hour = 4;
+    sTime.minute = 30;
+    sTime.second = 0;
 
-	// Reset timeout detection
-	sTime.last_activity 		  = 0;
-	
-	#ifdef CONFIG_SIDEREAL
-	sTime.UTCoffset				  =0;
-	#endif
+    // Display style of both lines is default (HH:MM)
+    sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
+    sTime.line2ViewStyle = DISPLAY_DEFAULT_VIEW;
+
+    // Reset timeout detection
+    sTime.last_activity = 0;
+
+#ifdef CONFIG_SIDEREAL
+    sTime.UTCoffset = 0;
+#endif
 }
 
 
@@ -131,42 +130,39 @@ void reset_clock(void)
 // @param       none
 // @return      none
 // *************************************************************************************************
-void clock_tick(void)
-{
-	// Use sTime.drawFlag to minimize display updates
-	// sTime.drawFlag = 1: second
-	// sTime.drawFlag = 2: minute, second
-	// sTime.drawFlag = 3: hour, minute
-	sTime.drawFlag = 1;
 
-	// Increase global system time
-	sTime.system_time++;
+void clock_tick(void) {
+    // Use sTime.drawFlag to minimize display updates
+    // sTime.drawFlag = 1: second
+    // sTime.drawFlag = 2: minute, second
+    // sTime.drawFlag = 3: hour, minute
+    sTime.drawFlag = 1;
 
-	// Add 1 second
-	sTime.second++;
+    // Increase global system time
+    sTime.system_time++;
 
-	// Add 1 minute
-	if (sTime.second == 60)
-	{
-		sTime.second = 0;
-		sTime.minute++;
-		sTime.drawFlag++;
+    // Add 1 second
+    sTime.second++;
 
-		// Add 1 hour
-		if (sTime.minute == 60)
-		{
-			sTime.minute = 0;
-			sTime.hour++;
-			sTime.drawFlag++;
+    // Add 1 minute
+    if (sTime.second == 60) {
+        sTime.second = 0;
+        sTime.minute++;
+        sTime.drawFlag++;
 
-			// Add 1 day
-			if (sTime.hour == 24)
-			{
-				sTime.hour = 0;
-				add_day();
-			}
-		}
-	}
+        // Add 1 hour
+        if (sTime.minute == 60) {
+            sTime.minute = 0;
+            sTime.hour++;
+            sTime.drawFlag++;
+
+            // Add 1 day
+            if (sTime.hour == 24) {
+                sTime.hour = 0;
+                add_day();
+            }
+        }
+    }
 }
 
 
@@ -177,13 +173,13 @@ void clock_tick(void)
 // @return      u8				Hour in 12H format
 // *************************************************************************************************
 #if (OPTION_TIME_DISPLAY > CLOCK_24HR)
-u8 convert_hour_to_12H_format(u8 hour)
-{
-	// 00:00 .. 11:59 --> AM 12:00 .. 11:59
-	if (hour == 0)			return (hour + 12);
-	else if (hour <= 12)	return (hour);
-	// 13:00 .. 23:59 --> PM 01:00 .. 11:59
-	else  					return (hour - 12);
+
+u8 convert_hour_to_12H_format(u8 hour) {
+    // 00:00 .. 11:59 --> AM 12:00 .. 11:59
+    if (hour == 0) return (hour + 12);
+    else if (hour <= 12) return (hour);
+        // 13:00 .. 23:59 --> PM 01:00 .. 11:59
+    else return (hour - 12);
 }
 
 
@@ -193,12 +189,12 @@ u8 convert_hour_to_12H_format(u8 hour)
 // @param       u8 hour		Hour in 24H format
 // @return      u8				1 = AM, 0 = PM
 // *************************************************************************************************
-u8 is_hour_am(u8 hour)
-{
-	// 00:00 .. 11:59 --> AM 12:00 .. 11:59
-	if (hour < 12)	return (1);
-	// 12:00 .. 23:59 --> PM 12:00 .. 11:59
-	else  			return (0);
+
+u8 is_hour_am(u8 hour) {
+    // 00:00 .. 11:59 --> AM 12:00 .. 11:59
+    if (hour < 12) return (1);
+        // 12:00 .. 23:59 --> PM 12:00 .. 11:59
+    else return (0);
 }
 
 #if (OPTION_TIME_DISPLAY == CLOCK_DISPLAY_SELECT)
@@ -211,9 +207,9 @@ u8 is_hour_am(u8 hour)
 //				u8 blanks			Not used
 // @return      none
 // *************************************************************************************************
-void display_selection_Timeformat1(u8 segments, u32 index, u8 digits, u8 blanks, u8 dummy)
-{
-	if (index < 2) display_chars(segments, (u8 *)selection_Timeformat[index], SEG_ON_BLINK_ON);
+
+void display_selection_Timeformat1(u8 segments, u32 index, u8 digits, u8 blanks, u8 dummy) {
+    if (index < 2) display_chars(segments, (u8 *) selection_Timeformat[index], SEG_ON_BLINK_ON);
 }
 #endif // CLOCK_DISPLAY_SELECT
 
@@ -226,133 +222,126 @@ void display_selection_Timeformat1(u8 segments, u32 index, u8 digits, u8 blanks,
 // @param       u8 line		LINE1, LINE2
 // @return      none
 // *************************************************************************************************
-void mx_time(u8 line)
-{
-  u8 select;
-  s32 timeformat;
-  s16 timeformat1;
-  s32 hours;
-  s32 minutes;
-  s32 seconds;
-  u8 * str;
 
-  // Clear display
-  clear_display_all();
+void mx_time(u8 line) {
+    u8 select;
+    s32 timeformat;
+    s16 timeformat1;
+    s32 hours;
+    s32 minutes;
+    s32 seconds;
+    u8 * str;
+
+    // Clear display
+    clear_display_all();
 
 #ifdef CONFIG_USE_SYNC_TOSET_TIME
 
-  if (sys.flag.low_battery) return;
-  display_sync(LINE2, DISPLAY_LINE_UPDATE_FULL);
-  start_simpliciti_sync();
+    if (sys.flag.low_battery) return;
+    display_sync(LINE2, DISPLAY_LINE_UPDATE_FULL);
+    start_simpliciti_sync();
 
 #else
-  // Convert global time to local variables
-  // Global time keeps on ticking in background until it is overwritten
-  if (sys.flag.am_pm_time)
-  {
-    timeformat 	= TIMEFORMAT_12H;
-  }
-  else
-  {
-    timeformat 	= TIMEFORMAT_24H;
-  }
-  timeformat1	= timeformat;
-  hours 		= sTime.hour;
-  minutes 	= sTime.minute;
-  seconds 	= sTime.second;
-
-  // Init value index
-  select = 0;
-
-  // Loop values until all are set or user breaks	set
-  while(1)
-  {
-    // Idle timeout: exit without saving
-    if (sys.flag.idle_timeout)
-    {
-      // Roll back time format
-      if (timeformat1 == TIMEFORMAT_12H)
-        sys.flag.am_pm_time = 1;
-      else
-        sys.flag.am_pm_time = 0;
-      display_symbol(LCD_SYMB_AM, SEG_OFF);
-      break;
+    // Convert global time to local variables
+    // Global time keeps on ticking in background until it is overwritten
+    if (sys.flag.am_pm_time) {
+        timeformat = TIMEFORMAT_12H;
+    } else {
+        timeformat = TIMEFORMAT_24H;
     }
+    timeformat1 = timeformat;
+    hours = sTime.hour;
+    minutes = sTime.minute;
+    seconds = sTime.second;
 
-    // Button STAR (short): save, then exit
-    if (button.flag.star)
-    {
-      // Stop clock timer
-      Timer0_Stop();
+    // Init value index
+    select = 0;
 
-      // Store local variables in global clock time
-      sTime.hour 	 = hours;
-      sTime.minute = minutes;
-      sTime.second = seconds;
+    // Loop values until all are set or user breaks	set
+    while (1) {
+        // Idle timeout: exit without saving
+        if (sys.flag.idle_timeout) {
+            // Roll back time format
+            if (timeformat1 == TIMEFORMAT_12H)
+                sys.flag.am_pm_time = 1;
+            else
+                sys.flag.am_pm_time = 0;
+            display_symbol(LCD_SYMB_AM, SEG_OFF);
+            break;
+        }
 
-      // Start clock timer
-      Timer0_Start();
+        // Button STAR (short): save, then exit
+        if (button.flag.star) {
+            // Stop clock timer
+            Timer0_Stop();
 
-      // Full display update is done when returning from function
-      display_symbol(LCD_SYMB_AM, SEG_OFF);
+            // Store local variables in global clock time
+            sTime.hour = hours;
+            sTime.minute = minutes;
+            sTime.second = seconds;
 
-      #ifdef CONFIG_SIDEREAL
-      if(sSidereal_time.sync>0)
-        sync_sidereal();
-      #endif
+            // Start clock timer
+            Timer0_Start();
 
-      break;
-    }
+            // Full display update is done when returning from function
+            display_symbol(LCD_SYMB_AM, SEG_OFF);
 
-    switch (select)
-    {
-#if (OPTION_TIME_DISPLAY == CLOCK_DISPLAY_SELECT)
-    case 0:		// Clear LINE1 and LINE2 and AM icon - required when coming back from set_value(seconds)
-      clear_display();
-      display_symbol(LCD_SYMB_AM, SEG_OFF);
-
-      // Set 24H / 12H time format
-      set_value(&timeformat, 1, 0, 0, 1, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_SELECTION + SETVALUE_NEXT_VALUE, LCD_SEG_L1_3_1, display_selection_Timeformat1);
-
-      // Modify global time format variable immediately to update AM/PM icon correctly
-      if (timeformat == TIMEFORMAT_12H) 	sys.flag.am_pm_time = 1;
-      else								sys.flag.am_pm_time = 0;
-      select = 1;
-      break;
-#else
-    case 0:
+#ifdef CONFIG_SIDEREAL
+            if (sSidereal_time.sync > 0)
+                sync_sidereal();
 #endif
-    case 1:		// Display HH:MM (LINE1) and .SS (LINE2)
-      str = itoa(hours, 2, 0);
-      display_chars(LCD_SEG_L1_3_2, str, SEG_ON);
-      display_symbol(LCD_SEG_L1_COL, SEG_ON);
 
-      str = itoa(minutes, 2, 0);
-      display_chars(LCD_SEG_L1_1_0, str, SEG_ON);
+            break;
+        }
 
-      str = itoa(seconds, 2, 0);
-      display_chars(LCD_SEG_L2_1_0, str, SEG_ON);
-      display_symbol(LCD_SEG_L2_DP, SEG_ON);
+        switch (select) {
+#if (OPTION_TIME_DISPLAY == CLOCK_DISPLAY_SELECT)
+            case 0: // Clear LINE1 and LINE2 and AM icon - required when coming back from set_value(seconds)
+                clear_display();
+                display_symbol(LCD_SYMB_AM, SEG_OFF);
 
-      // Set hours
-      set_value(&hours, 2, 0, 0, 23, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L1_3_2, display_hours_12_or_24);
-      select = 2;
-      break;
+                // Set 24H / 12H time format
+                set_value(&timeformat, 1, 0, 0, 1, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_SELECTION + SETVALUE_NEXT_VALUE, LCD_SEG_L1_3_1, display_selection_Timeformat1);
 
-    case 2:		// Set minutes
-      set_value(&minutes, 2, 0, 0, 59, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L1_1_0, display_value1);
-      select = 3;
-      break;
+                // Modify global time format variable immediately to update AM/PM icon correctly
+                if (timeformat == TIMEFORMAT_12H) sys.flag.am_pm_time = 1;
+                else sys.flag.am_pm_time = 0;
+                select = 1;
+                break;
+#else
+            case 0:
+#endif
+            case 1: // Display HH:MM (LINE1) and .SS (LINE2)
+                str = itoa(hours, 2, 0);
+                display_chars(LCD_SEG_L1_3_2, str, SEG_ON);
+                display_symbol(LCD_SEG_L1_COL, SEG_ON);
 
-    case 3:		// Set seconds
-      set_value(&seconds, 2, 0, 0, 59, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L2_1_0, display_value1);
-      select = 0;
-      break;
+                str = itoa(minutes, 2, 0);
+                display_chars(LCD_SEG_L1_1_0, str, SEG_ON);
+
+                str = itoa(seconds, 2, 0);
+                display_chars(LCD_SEG_L2_1_0, str, SEG_ON);
+                display_symbol(LCD_SEG_L2_DP, SEG_ON);
+
+                // Set hours
+                set_value(&hours, 2, 0, 0, 23, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L1_3_2, display_hours_12_or_24);
+                select = 2;
+                break;
+
+            case 2: // Set minutes
+                set_value(&minutes, 2, 0, 0, 59, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L1_1_0, display_value1);
+                select = 3;
+                break;
+
+            case 3: // Set seconds
+                set_value(&seconds, 2, 0, 0, 59, SETVALUE_ROLLOVER_VALUE + SETVALUE_DISPLAY_VALUE + SETVALUE_NEXT_VALUE, LCD_SEG_L2_1_0, display_value1);
+                select = 0;
+                break;
+        }
     }
-  }
 
-  // Clear button flags
-  button.all_flags = 0;
+    // Clear button flags
+    button.all_flags = 0;
 
 #endif
 }
@@ -364,11 +353,11 @@ void mx_time(u8 line)
 // @param       line		LINE1
 // @return      none
 // *************************************************************************************************
-void sx_time(u8 line)
-{
-	// Toggle display view style
-	if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW) 	sTime.line1ViewStyle = DISPLAY_ALTERNATIVE_VIEW;
-	else 									 			sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
+
+void sx_time(u8 line) {
+    // Toggle display view style
+    if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW) sTime.line1ViewStyle = DISPLAY_ALTERNATIVE_VIEW;
+    else sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
 }
 
 // *************************************************************************************************
@@ -379,55 +368,42 @@ void sx_time(u8 line)
 //				u8 update		DISPLAY_LINE_UPDATE_FULL, DISPLAY_LINE_UPDATE_PARTIAL
 // @return      none
 // *************************************************************************************************
-void display_time(u8 line, u8 update)
-{
-	// Partial update
-	if (update == DISPLAY_LINE_UPDATE_PARTIAL)
-	{
-	  if(sTime.drawFlag != 0)
-	  {
-	    if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW)
-	    {
-	      switch(sTime.drawFlag)
-	      {
-	      case 3:
-	        display_hours_12_or_24(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), sTime.hour, 2, 1, SEG_ON);
-	      case 2:
-	        display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON);
-	      }
-	    }
-	    else
-	    {
-	      // Seconds are always updated
-	      display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
-	    }
-	  }
-	}
-	else if (update == DISPLAY_LINE_UPDATE_FULL)
-	{
-	  // Full update
-	  if ( ( line == LINE1 && sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW ) || ( line == LINE2 && sTime.line2ViewStyle == DISPLAY_DEFAULT_VIEW ) )
-	  {
-	    // Display hours
-	    display_hours_12_or_24(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), sTime.hour, 2, 1, SEG_ON);
-	    // Display minute
-	    display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON);
-	    display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_ON_BLINK_ON);
-	  }
-	  else
-	  {
-	    // Display seconds
-	    display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
-	    display_symbol(switch_seg(line, LCD_SEG_L1_DP1, LCD_SEG_L2_DP), SEG_ON);
-	  }
-	}
-	else if (update == DISPLAY_LINE_CLEAR)
-	{
-	  display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_OFF_BLINK_OFF);
-	  // Change display style to default (HH:MM)
-	  sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
-	  // Clean up AM/PM icon
-	  display_symbol(LCD_SYMB_AM, SEG_OFF);
-	}
+
+void display_time(u8 line, u8 update) {
+    // Partial update
+    if (update == DISPLAY_LINE_UPDATE_PARTIAL) {
+        if (sTime.drawFlag != 0) {
+            if (sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW) {
+                switch (sTime.drawFlag) {
+                    case 3:
+                        display_hours_12_or_24(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), sTime.hour, 2, 1, SEG_ON);
+                    case 2:
+                        display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON);
+                }
+            } else {
+                // Seconds are always updated
+                display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
+            }
+        }
+    } else if (update == DISPLAY_LINE_UPDATE_FULL) {
+        // Full update
+        if ((line == LINE1 && sTime.line1ViewStyle == DISPLAY_DEFAULT_VIEW) || (line == LINE2 && sTime.line2ViewStyle == DISPLAY_DEFAULT_VIEW)) {
+            // Display hours
+            display_hours_12_or_24(switch_seg(line, LCD_SEG_L1_3_2, LCD_SEG_L2_3_2), sTime.hour, 2, 1, SEG_ON);
+            // Display minute
+            display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.minute, 2, 0), SEG_ON);
+            display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_ON_BLINK_ON);
+        } else {
+            // Display seconds
+            display_chars(switch_seg(line, LCD_SEG_L1_1_0, LCD_SEG_L2_1_0), itoa(sTime.second, 2, 0), SEG_ON);
+            display_symbol(switch_seg(line, LCD_SEG_L1_DP1, LCD_SEG_L2_DP), SEG_ON);
+        }
+    } else if (update == DISPLAY_LINE_CLEAR) {
+        display_symbol(switch_seg(line, LCD_SEG_L1_COL, LCD_SEG_L2_COL0), SEG_OFF_BLINK_OFF);
+        // Change display style to default (HH:MM)
+        sTime.line1ViewStyle = DISPLAY_DEFAULT_VIEW;
+        // Clean up AM/PM icon
+        display_symbol(LCD_SYMB_AM, SEG_OFF);
+    }
 }
 
